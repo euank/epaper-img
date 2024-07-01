@@ -280,21 +280,23 @@ static int DEV_Equipment_Testing(void)
 void DEV_GPIO_Init(void)
 {
 #ifdef RPI
-	EPD_RST_PIN     = 17;
-	EPD_DC_PIN      = 25;
-	EPD_CS_PIN      = 8;
-    EPD_PWR_PIN     = 18;
-	EPD_BUSY_PIN    = 24;
-    EPD_MOSI_PIN    = 10;
-	EPD_SCLK_PIN    = 11;
-#elif JETSON
-	EPD_RST_PIN     = GPIO17;
-	EPD_DC_PIN      = GPIO25;
-	EPD_CS_PIN      = SPI0_CS0;
-    EPD_PWR_PIN     = GPIO18;
-	EPD_BUSY_PIN    = GPIO24;
-    EPD_MOSI_PIN    = SPI0_MOSI;
-	EPD_SCLK_PIN    = SPI0_SCLK;
+	EPD_PWR_PIN     = 14;
+	EPD_MOSI_PIN    = 20;
+	EPD_SCLK_PIN    = 21;
+#if 0
+	SPI_Handle = lgSpiOpen(1, 0, 10000000, 0);
+	EPD_RST_PIN     = 5;
+	EPD_DC_PIN      = 6;
+	EPD_CS_PIN      = /* 18; */ 3;
+	EPD_BUSY_PIN    = 26;
+#else
+	SPI_Handle = lgSpiOpen(1, 0, 10000000, 0);
+        // screen 2
+	EPD_RST_PIN     = 0;
+	EPD_DC_PIN      = 12;
+	EPD_CS_PIN      = 4;
+	EPD_BUSY_PIN    = 13;
+#endif
 #endif
 
     DEV_GPIO_Mode(EPD_BUSY_PIN, 0);
@@ -420,31 +422,18 @@ UBYTE DEV_Module_Init(void)
         return -1;
     }
 
-    if(fgets(buffer, sizeof(buffer), fp) != NULL)
-    {
-        GPIO_Handle = lgGpiochipOpen(4);
-        if (GPIO_Handle < 0)
-        {
-            Debug( "gpiochip4 Export Failed\n");
-            return -1;
-        }
-    }
-    else
-    {
         GPIO_Handle = lgGpiochipOpen(0);
         if (GPIO_Handle < 0)
         {
             Debug( "gpiochip0 Export Failed\n");
             return -1;
         }
-    }
-    SPI_Handle = lgSpiOpen(0, 0, 10000000, 0);
     DEV_GPIO_Init();
 #elif USE_DEV_LIB
-	printf("Write and read /dev/spidev0.0 \r\n");
+	printf("Write and read /dev/spidev1.0 \r\n");
     GPIOD_Export();
 	DEV_GPIO_Init();
-	DEV_HARDWARE_SPI_begin("/dev/spidev0.0");
+	DEV_HARDWARE_SPI_begin("/dev/spidev1.0");
     DEV_HARDWARE_SPI_setSpeed(10000000);
 #endif
 
@@ -457,9 +446,9 @@ UBYTE DEV_Module_Init(void)
 	SYSFS_software_spi_setDataMode(SOFTWARE_SPI_Mode0);
 	SYSFS_software_spi_setClockDivider(SOFTWARE_SPI_CLOCK_DIV4);
 #elif USE_HARDWARE_LIB
-	printf("Write and read /dev/spidev0.0 \r\n");
+	printf("Write and read /dev/spidev1.1 \r\n");
 	DEV_GPIO_Init();
-	DEV_HARDWARE_SPI_begin("/dev/spidev0.0");
+	DEV_HARDWARE_SPI_begin("/dev/spidev1.0");
 #endif
 
 #endif
@@ -489,12 +478,12 @@ void DEV_Module_Exit(void)
 	DEV_Digital_Write(EPD_DC_PIN, 0);
 	DEV_Digital_Write(EPD_RST_PIN, 0);
 #elif USE_LGPIO_LIB 
-    // DEV_Digital_Write(EPD_CS_PIN, 0);
-    // DEV_Digital_Write(EPD_PWR_PIN, 0);
-	// DEV_Digital_Write(EPD_DC_PIN, 0);
-	// DEV_Digital_Write(EPD_RST_PIN, 0);
-    // lgSpiClose(SPI_Handle);
-    // lgGpiochipClose(GPIO_Handle);
+    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_Digital_Write(EPD_PWR_PIN, 0);
+	DEV_Digital_Write(EPD_DC_PIN, 0);
+	DEV_Digital_Write(EPD_RST_PIN, 0);
+    lgSpiClose(SPI_Handle);
+    lgGpiochipClose(GPIO_Handle);
 #elif USE_DEV_LIB
 	DEV_HARDWARE_SPI_end();
 	DEV_Digital_Write(EPD_CS_PIN, 0);

@@ -4,6 +4,7 @@ DIR_FONTS	 = ./lib/Fonts
 DIR_GUI		 = ./lib/GUI
 DIR_Examples = ./examples
 DIR_BIN		 = ./bin
+CFLAGS="-I/home/esk/lg"
 
 EPD = NULL
 ifeq ($(EPD), epd1in64g)
@@ -222,7 +223,7 @@ ifeq ($(USELIB_RPI), USE_BCM2835_LIB)
 else ifeq ($(USELIB_RPI), USE_WIRINGPI_LIB)
 	LIB_RPI += -lwiringPi -lm 
 else ifeq ($(USELIB_RPI), USE_LGPIO_LIB)
-	LIB_RPI += -llgpio -lm
+	LIB_RPI += -L/home/esk/lg -llgpio -lm
 else ifeq ($(USELIB_RPI), USE_DEV_LIB)
 	LIB_RPI += -lgpiod -lm 
 endif

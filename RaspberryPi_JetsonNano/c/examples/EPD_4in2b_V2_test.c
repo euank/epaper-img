@@ -78,7 +78,9 @@ int EPD_4in2b_V2_test(void)
     Paint_Clear(WHITE);    
     EPD_4IN2B_V2_Display(BlackImage, RYImage);
     DEV_Delay_ms(2000);
+#endif    
 
+#if 0
     printf("show red bmp------------------------\r\n");
     Paint_SelectImage(BlackImage);
     GUI_ReadBmp("./pic/4in2b-b.bmp", 0, 0);
@@ -88,13 +90,13 @@ int EPD_4in2b_V2_test(void)
 	DEV_Delay_ms(2000);
 #endif    
     
-#if 1   // show image for array    
+#if 0   // show image for array    
     printf("show image for array\r\n");
     EPD_4IN2B_V2_Display(gImage_4in2bc_b, gImage_4in2bc_ry);
     DEV_Delay_ms(2000);
 #endif
 
-#if 1   // Drawing on the image
+#if 0   // Drawing on the image
     /*Horizontal screen*/
     //1.Draw black image
     printf("Draw black image\r\n");
