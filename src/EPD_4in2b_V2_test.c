@@ -67,15 +67,12 @@ int EPD_4in2b_V2_test(void) {
 
   // Select Image
   Paint_SelectImage(BlackImage);
-  Paint_Clear(WHITE);
   Paint_SelectImage(RYImage);
-  Paint_Clear(WHITE);
 
   printf("show window BMP-----------------\r\n");
   Paint_SelectImage(BlackImage);
   GUI_ReadBmp("./pic/100x100.bmp", 10, 0);
   Paint_SelectImage(RYImage);
-  Paint_Clear(WHITE);
   EPD_4IN2B_V2_Display(BlackImage, RYImage);
   DEV_Delay_ms(2000);
 

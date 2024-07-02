@@ -2,7 +2,7 @@ project('epaper-img', 'c',
   version : '0.1',
   default_options : ['warning_level=3'])
 
-incdir = include_directories('lib/Config', 'lib/GUI', 'lib/e-Paper', 'lib/Fonts')
+incdir = include_directories('lib/Config', 'lib/GUI', 'lib/e-Paper')
 
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required : false)
