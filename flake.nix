@@ -47,13 +47,15 @@
         };
       in
       {
-        formatter = pkgs.nixfmt-rfc-style;
+        formatter = if system == "x86_64-linux" then pkgs.nixfmt-rfc-style else null;
         devShells.default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [
-            clang-tools
-            meson
-            ninja
-          ];
+          nativeBuildInputs =
+            with pkgs;
+            [
+              meson
+              ninja
+            ]
+            ++ (if system == "x86_64-linux" then [ clang-tools ] else [ ]);
           buildInputs = [ lgpio ];
 
           PKG_CONFIG_PATH = "${lgpio}/lib/pkgconfig";
