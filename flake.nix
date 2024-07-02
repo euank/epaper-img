@@ -54,6 +54,7 @@
             [
               meson
               ninja
+              pkg-config
             ]
             ++ (if system == "x86_64-linux" then [ clang-tools ] else [ ]);
           buildInputs = [ lgpio ];
