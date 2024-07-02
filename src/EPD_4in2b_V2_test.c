@@ -71,7 +71,6 @@ int EPD_4in2b_V2_test(void) {
   Paint_SelectImage(RYImage);
   Paint_Clear(WHITE);
 
-#if 1 // show bmp
   printf("show window BMP-----------------\r\n");
   Paint_SelectImage(BlackImage);
   GUI_ReadBmp("./pic/100x100.bmp", 10, 0);
@@ -79,58 +78,6 @@ int EPD_4in2b_V2_test(void) {
   Paint_Clear(WHITE);
   EPD_4IN2B_V2_Display(BlackImage, RYImage);
   DEV_Delay_ms(2000);
-#endif
-
-#if 0
-    printf("show red bmp------------------------\r\n");
-    Paint_SelectImage(BlackImage);
-    GUI_ReadBmp("./pic/4in2b-b.bmp", 0, 0);
-    Paint_SelectImage(RYImage);
-    GUI_ReadBmp("./pic/4in2b-r.bmp", 0, 0);
-    EPD_4IN2B_V2_Display(BlackImage, RYImage);
-	DEV_Delay_ms(2000);
-#endif
-
-#if 0 // show image for array    
-    printf("show image for array\r\n");
-    EPD_4IN2B_V2_Display(gImage_4in2bc_b, gImage_4in2bc_ry);
-    DEV_Delay_ms(2000);
-#endif
-
-#if 0 // Drawing on the image
-    /*Horizontal screen*/
-    //1.Draw black image
-    printf("Draw black image\r\n");
-    Paint_SelectImage(BlackImage);
-    Paint_Clear(WHITE);
-    Paint_DrawPoint(10, 80, BLACK, DOT_PIXEL_1X1, DOT_STYLE_DFT);
-    Paint_DrawPoint(10, 90, BLACK, DOT_PIXEL_2X2, DOT_STYLE_DFT);
-    Paint_DrawPoint(10, 100, BLACK, DOT_PIXEL_3X3, DOT_STYLE_DFT);
-    Paint_DrawPoint(10, 110, BLACK, DOT_PIXEL_3X3, DOT_STYLE_DFT);
-    Paint_DrawLine(20, 70, 70, 120, BLACK, DOT_PIXEL_1X1, LINE_STYLE_SOLID);
-    Paint_DrawLine(70, 70, 20, 120, BLACK, DOT_PIXEL_1X1, LINE_STYLE_SOLID);      
-    Paint_DrawRectangle(20, 70, 70, 120, BLACK, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
-    Paint_DrawRectangle(80, 70, 130, 120, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);
-    Paint_DrawString_EN(10, 0, "waveshare", &Font16, BLACK, WHITE);    
-    Paint_DrawString_CN(130, 20, "Î¢Ñ©µç×Ó", &Font24CN, WHITE, BLACK);
-    Paint_DrawNum(10, 50, 987654321, &Font16, WHITE, BLACK);
-    
-    //2.Draw red image
-    printf("Draw red image\r\n");
-    Paint_SelectImage(RYImage);
-    Paint_Clear(WHITE);
-    Paint_DrawCircle(160, 95, 20, BLACK, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
-    Paint_DrawCircle(210, 95, 20, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);
-    Paint_DrawLine(85, 95, 125, 95, BLACK, DOT_PIXEL_1X1, LINE_STYLE_DOTTED);
-    Paint_DrawLine(105, 75, 105, 115, BLACK, DOT_PIXEL_1X1, LINE_STYLE_DOTTED);  
-    Paint_DrawString_CN(130, 0,"ÄãºÃabc", &Font12CN, BLACK, WHITE);
-    Paint_DrawString_EN(10, 20, "hello world", &Font12, WHITE, BLACK);
-    Paint_DrawNum(10, 33, 123456789, &Font12, BLACK, WHITE);
-
-    printf("EPD_Display\r\n");
-    EPD_4IN2B_V2_Display(BlackImage, RYImage);
-    DEV_Delay_ms(2000);
-#endif
 
   printf("Clear...\r\n");
   EPD_4IN2B_V2_Clear();
