@@ -1,42 +1,29 @@
-﻿# 说明 explain
-Development 分支用于存放用户的提交的修改代码，经验证后，我们将移植到主分支中；非常感谢您对我们的支持</br>
-The Development branch is used to store the modified code submitted by users. After verification, we will migrate it to the main branch. Thank you very much for your support 
+## e-Paper img
 
-# e-Paper  
-waveshare electronics</br>
-![waveshare_logo.png](waveshare_logo.png)
+This code allows flashing an image to a [4.2 inch B](https://www.waveshare.com/wiki/4.2inch_e-Paper_Module_\(B\)\_Manual) waveshare e-ink display.
 
-# 说明 explain
-这个开发分支用于存放用户的提交的修改代码，经验证后，我们将移植到主分支中；非常感谢您对我们的支持
+It makes assumptions that are specific to the environment I'm running in, and is not meant to really be generally usable code.
 
-This development branch is used to store the changes committed by users. After verification, we will migrate them to the main branch. Thank you very much for your support
+I specifically want the following properties:
 
-## 中文:  
-Jetson Nano、Raspberry Pi、Arduino、STM32例程</br>
-* RaspberryPi_JetsonNano  
-    > C
-    > Python 
-* Arduino:  
-    > Arduino UNO  
-* STM32:  
-    > STM32F103ZET6 
-    
-更多资料请在官网上搜索:  </br>
-http://www.waveshare.net
+1. Write images (and only images, I don't care about fonts or drawing or whatever)
+2. Control 3 e-Ink displays from one board at once by wiring them to different GPIO pins and using SPI CS selection.
+3. Runs on the NixOS image I'm using for this project (TODO: link to it once it's in a public repo somewhere)
 
+The goal is for this to spit out a CLI tool that allows displaying an image with a given SPI+GPIO configuration at runtime.
 
-## English:  
-Jetson Nano、Raspberry Pi、Arduino、STM32 Demo:  </br>
-* RaspberryPi_JetsonNano:  
-    > C
-    > Python
-* Arduino:  
-    > Arduino UNO  
-* STM32:  
-    > STM32F103ZET6 
-    
-For more information, please search on the official website:   </br>
-https://www.waveshare.com
+The original example code this is based on could display an image, but configuration was hard-coded, and it supported a bunch of boards. I really don't care about the other boards, so we can simplify.
 
+### Why C
 
+I want to do this in rust, but the venerable epd-waveshare rust library simply did not work for my board and raspberry pi setup, and I eventually gave up and decided rust shelling out to a CLI tool for this part of it was _fine_.
 
+If I get enough free time, I might finish debugging my rust issues I ran into.
+
+## License / provenance
+
+This code is derived from the RaspberryPi / C code in [this repository](https://github.com/waveshareteam/e-Paper/tree/master).
+
+It retains the git history to show what commit it came from, and is under the original MIT license.
+
+Modifications are made by me.
