@@ -35,14 +35,13 @@
 function :	Software reset
 parameter:
 ******************************************************************************/
-static void EPD_2IN9_DES_Reset(void)
-{
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(100);
-    DEV_Digital_Write(EPD_RST_PIN, 0);
-    DEV_Delay_ms(2);
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(100);
+static void EPD_2IN9_DES_Reset(void) {
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(100);
+  DEV_Digital_Write(EPD_RST_PIN, 0);
+  DEV_Delay_ms(2);
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(100);
 }
 
 /******************************************************************************
@@ -50,12 +49,11 @@ function :	send command
 parameter:
      Reg : Command register
 ******************************************************************************/
-static void EPD_2IN9_DES_SendCommand(UBYTE Reg)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 0);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Reg);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_2IN9_DES_SendCommand(UBYTE Reg) {
+  DEV_Digital_Write(EPD_DC_PIN, 0);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Reg);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -63,111 +61,101 @@ function :	send data
 parameter:
     Data : Write data
 ******************************************************************************/
-static void EPD_2IN9_DES_SendData(UBYTE Data)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Data);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_2IN9_DES_SendData(UBYTE Data) {
+  DEV_Digital_Write(EPD_DC_PIN, 1);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Data);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
 function :	Wait until the busy_pin goes LOW
 parameter:
 ******************************************************************************/
-void EPD_2IN9_DES_ReadBusy(void)
-{
-    Debug("e-Paper busy\r\n");
-	while(1)
-	{	 //=1 BUSY
-		EPD_2IN9_DES_SendCommand(0x71);
-		if(DEV_Digital_Read(EPD_BUSY_PIN)==1) 
-			break;
-		DEV_Delay_ms(50);
-	}
-	DEV_Delay_ms(50);
-    Debug("e-Paper busy release\r\n");
+void EPD_2IN9_DES_ReadBusy(void) {
+  Debug("e-Paper busy\r\n");
+  while (1) { //=1 BUSY
+    EPD_2IN9_DES_SendCommand(0x71);
+    if (DEV_Digital_Read(EPD_BUSY_PIN) == 1)
+      break;
+    DEV_Delay_ms(50);
+  }
+  DEV_Delay_ms(50);
+  Debug("e-Paper busy release\r\n");
 }
 
 /******************************************************************************
 function :	Turn On Display
 parameter:
 ******************************************************************************/
-static void EPD_2IN9_DES_TurnOnDisplay(void)
-{
-	EPD_2IN9_DES_SendCommand(0x12); //Display Update Control
-	EPD_2IN9_DES_ReadBusy();
+static void EPD_2IN9_DES_TurnOnDisplay(void) {
+  EPD_2IN9_DES_SendCommand(0x12); // Display Update Control
+  EPD_2IN9_DES_ReadBusy();
 }
 
 /******************************************************************************
 function :	Initialize the e-Paper register
 parameter:
 ******************************************************************************/
-void EPD_2IN9_DES_Init(void)
-{
-	EPD_2IN9_DES_Reset();
-	DEV_Delay_ms(100);
- 
-	EPD_2IN9_DES_SendCommand(0x04);  //SWRESET
-	EPD_2IN9_DES_ReadBusy();   
+void EPD_2IN9_DES_Init(void) {
+  EPD_2IN9_DES_Reset();
+  DEV_Delay_ms(100);
 
-	EPD_2IN9_DES_SendCommand(0x00); //Driver output control      
-	EPD_2IN9_DES_SendData(0x1f);
-	
-	EPD_2IN9_DES_SendCommand(0x50);
-	EPD_2IN9_DES_SendData(0x97);
+  EPD_2IN9_DES_SendCommand(0x04); // SWRESET
+  EPD_2IN9_DES_ReadBusy();
+
+  EPD_2IN9_DES_SendCommand(0x00); // Driver output control
+  EPD_2IN9_DES_SendData(0x1f);
+
+  EPD_2IN9_DES_SendCommand(0x50);
+  EPD_2IN9_DES_SendData(0x97);
 }
 
 /******************************************************************************
 function :	Clear screen
 parameter:
 ******************************************************************************/
-void EPD_2IN9_DES_Clear(void)
-{
-	UWORD i;
-	// EPD_2IN9_DES_SendCommand(0x10);
-	// for(i=0;i<4736;i++)
-	// {
-		// EPD_2IN9_DES_SendData(0xff);
-	// }
-	EPD_2IN9_DES_SendCommand(0x13);
-	for(i=0;i<4736;i++)
-	{
-		EPD_2IN9_DES_SendData(0xff);
-	}
-	EPD_2IN9_DES_TurnOnDisplay();
+void EPD_2IN9_DES_Clear(void) {
+  UWORD i;
+  // EPD_2IN9_DES_SendCommand(0x10);
+  // for(i=0;i<4736;i++)
+  // {
+  // EPD_2IN9_DES_SendData(0xff);
+  // }
+  EPD_2IN9_DES_SendCommand(0x13);
+  for (i = 0; i < 4736; i++) {
+    EPD_2IN9_DES_SendData(0xff);
+  }
+  EPD_2IN9_DES_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void EPD_2IN9_DES_Display(UBYTE *Image)
-{
-	UWORD i;	
-	// EPD_2IN9_DES_SendCommand(0x10);
-	// for(i=0;i<4736;i++)
-	// {
-		// EPD_2IN9_DES_SendData(0xff);
-	// }
-	EPD_2IN9_DES_SendCommand(0x13);
-	for(i=0;i<4736;i++)
-	{
-		EPD_2IN9_DES_SendData(Image[i]);
-	}
-	EPD_2IN9_DES_TurnOnDisplay();	
+void EPD_2IN9_DES_Display(UBYTE *Image) {
+  UWORD i;
+  // EPD_2IN9_DES_SendCommand(0x10);
+  // for(i=0;i<4736;i++)
+  // {
+  // EPD_2IN9_DES_SendData(0xff);
+  // }
+  EPD_2IN9_DES_SendCommand(0x13);
+  for (i = 0; i < 4736; i++) {
+    EPD_2IN9_DES_SendData(Image[i]);
+  }
+  EPD_2IN9_DES_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Enter sleep mode
 parameter:
 ******************************************************************************/
-void EPD_2IN9_DES_Sleep(void)
-{
-	EPD_2IN9_DES_SendCommand(0x50); //enter deep sleep
-	EPD_2IN9_DES_SendData(0xf7); 
-	EPD_2IN9_DES_SendCommand(0x02);
-	EPD_2IN9_DES_ReadBusy();
-	EPD_2IN9_DES_SendCommand(0x07);
-	EPD_2IN9_DES_SendData(0xa5);
+void EPD_2IN9_DES_Sleep(void) {
+  EPD_2IN9_DES_SendCommand(0x50); // enter deep sleep
+  EPD_2IN9_DES_SendData(0xf7);
+  EPD_2IN9_DES_SendCommand(0x02);
+  EPD_2IN9_DES_ReadBusy();
+  EPD_2IN9_DES_SendCommand(0x07);
+  EPD_2IN9_DES_SendData(0xa5);
 }

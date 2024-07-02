@@ -11,7 +11,7 @@
 * V3.0(2019-06-12):
 * 1.Change:
 *    lut_full_update[] => EPD_1IN54_lut_full_update[]
-*    lut_partial_update[] => EPD_1IN54_lut_partial_update[] 
+*    lut_partial_update[] => EPD_1IN54_lut_partial_update[]
 *    EPD_Reset() => EPD_1IN54_Reset()
 *    EPD_SendCommand() => EPD_1IN54_SendCommand()
 *    EPD_SendData() => EPD_1IN54_SendData()
@@ -88,31 +88,26 @@
 #include "Debug.h"
 
 static const unsigned char EPD_1IN54_lut_full_update[] = {
-    0x02, 0x02, 0x01, 0x11, 0x12, 0x12, 0x22, 0x22,
-    0x66, 0x69, 0x69, 0x59, 0x58, 0x99, 0x99, 0x88,
-    0x00, 0x00, 0x00, 0x00, 0xF8, 0xB4, 0x13, 0x51,
-    0x35, 0x51, 0x51, 0x19, 0x01, 0x00
-};
+    0x02, 0x02, 0x01, 0x11, 0x12, 0x12, 0x22, 0x22, 0x66, 0x69,
+    0x69, 0x59, 0x58, 0x99, 0x99, 0x88, 0x00, 0x00, 0x00, 0x00,
+    0xF8, 0xB4, 0x13, 0x51, 0x35, 0x51, 0x51, 0x19, 0x01, 0x00};
 
 static const unsigned char EPD_1IN54_lut_partial_update[] = {
-    0x10, 0x18, 0x18, 0x08, 0x18, 0x18, 0x08, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x13, 0x14, 0x44, 0x12,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
+    0x10, 0x18, 0x18, 0x08, 0x18, 0x18, 0x08, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x13, 0x14, 0x44, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 /******************************************************************************
 function :	Software reset
 parameter:
 ******************************************************************************/
-static void EPD_1IN54_Reset(void)
-{
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
-    DEV_Digital_Write(EPD_RST_PIN, 0);
-    DEV_Delay_ms(2);
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
+static void EPD_1IN54_Reset(void) {
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
+  DEV_Digital_Write(EPD_RST_PIN, 0);
+  DEV_Delay_ms(2);
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
 }
 
 /******************************************************************************
@@ -120,12 +115,11 @@ function :	send command
 parameter:
      Reg : Command register
 ******************************************************************************/
-static void EPD_1IN54_SendCommand(UBYTE Reg)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 0);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Reg);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_1IN54_SendCommand(UBYTE Reg) {
+  DEV_Digital_Write(EPD_DC_PIN, 0);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Reg);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -133,168 +127,161 @@ function :	send data
 parameter:
     Data : Write data
 ******************************************************************************/
-static void EPD_1IN54_SendData(UBYTE Data)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Data);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_1IN54_SendData(UBYTE Data) {
+  DEV_Digital_Write(EPD_DC_PIN, 1);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Data);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
 function :	Wait until the busy_pin goes LOW
 parameter:
 ******************************************************************************/
-void EPD_1IN54_ReadBusy(void)
-{
-    Debug("e-Paper busy\r\n");
-    while(DEV_Digital_Read(EPD_BUSY_PIN) == 1) {      //LOW: idle, HIGH: busy
-        DEV_Delay_ms(100);
-    }
-    Debug("e-Paper busy release\r\n");
+void EPD_1IN54_ReadBusy(void) {
+  Debug("e-Paper busy\r\n");
+  while (DEV_Digital_Read(EPD_BUSY_PIN) == 1) { // LOW: idle, HIGH: busy
+    DEV_Delay_ms(100);
+  }
+  Debug("e-Paper busy release\r\n");
 }
 
 /******************************************************************************
 function :	Setting the display window
 parameter:
 ******************************************************************************/
-static void EPD_1IN54_SetWindow(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend)
-{
-    EPD_1IN54_SendCommand(0x44); // SET_RAM_X_ADDRESS_START_END_POSITION
-    EPD_1IN54_SendData((Xstart >> 3) & 0xFF);
-    EPD_1IN54_SendData((Xend >> 3) & 0xFF);
+static void EPD_1IN54_SetWindow(UWORD Xstart, UWORD Ystart, UWORD Xend,
+                                UWORD Yend) {
+  EPD_1IN54_SendCommand(0x44); // SET_RAM_X_ADDRESS_START_END_POSITION
+  EPD_1IN54_SendData((Xstart >> 3) & 0xFF);
+  EPD_1IN54_SendData((Xend >> 3) & 0xFF);
 
-    EPD_1IN54_SendCommand(0x45); // SET_RAM_Y_ADDRESS_START_END_POSITION
-    EPD_1IN54_SendData(Ystart & 0xFF);
-    EPD_1IN54_SendData((Ystart >> 8) & 0xFF);
-    EPD_1IN54_SendData(Yend & 0xFF);
-    EPD_1IN54_SendData((Yend >> 8) & 0xFF);
+  EPD_1IN54_SendCommand(0x45); // SET_RAM_Y_ADDRESS_START_END_POSITION
+  EPD_1IN54_SendData(Ystart & 0xFF);
+  EPD_1IN54_SendData((Ystart >> 8) & 0xFF);
+  EPD_1IN54_SendData(Yend & 0xFF);
+  EPD_1IN54_SendData((Yend >> 8) & 0xFF);
 }
 
 /******************************************************************************
 function :	Set Cursor
 parameter:
 ******************************************************************************/
-static void EPD_1IN54_SetCursor(UWORD Xstart, UWORD Ystart)
-{
-    EPD_1IN54_SendCommand(0x4E); // SET_RAM_X_ADDRESS_COUNTER
-    EPD_1IN54_SendData((Xstart >> 3) & 0xFF);
+static void EPD_1IN54_SetCursor(UWORD Xstart, UWORD Ystart) {
+  EPD_1IN54_SendCommand(0x4E); // SET_RAM_X_ADDRESS_COUNTER
+  EPD_1IN54_SendData((Xstart >> 3) & 0xFF);
 
-    EPD_1IN54_SendCommand(0x4F); // SET_RAM_Y_ADDRESS_COUNTER
-    EPD_1IN54_SendData(Ystart & 0xFF);
-    EPD_1IN54_SendData((Ystart >> 8) & 0xFF);
+  EPD_1IN54_SendCommand(0x4F); // SET_RAM_Y_ADDRESS_COUNTER
+  EPD_1IN54_SendData(Ystart & 0xFF);
+  EPD_1IN54_SendData((Ystart >> 8) & 0xFF);
 }
 
 /******************************************************************************
 function :	Turn On Display
 parameter:
 ******************************************************************************/
-static void EPD_1IN54_TurnOnDisplay(void)
-{
-    EPD_1IN54_SendCommand(0x22); // DISPLAY_UPDATE_CONTROL_2
-    EPD_1IN54_SendData(0xC4);
-    EPD_1IN54_SendCommand(0x20); // MASTER_ACTIVATION
-    EPD_1IN54_SendCommand(0xFF); // TERMINATE_FRAME_READ_WRITE
+static void EPD_1IN54_TurnOnDisplay(void) {
+  EPD_1IN54_SendCommand(0x22); // DISPLAY_UPDATE_CONTROL_2
+  EPD_1IN54_SendData(0xC4);
+  EPD_1IN54_SendCommand(0x20); // MASTER_ACTIVATION
+  EPD_1IN54_SendCommand(0xFF); // TERMINATE_FRAME_READ_WRITE
 
-    EPD_1IN54_ReadBusy();
+  EPD_1IN54_ReadBusy();
 }
 
 /******************************************************************************
 function :	Initialize the e-Paper register
 parameter:
 ******************************************************************************/
-void EPD_1IN54_Init(UBYTE Mode)
-{
-    EPD_1IN54_Reset();
+void EPD_1IN54_Init(UBYTE Mode) {
+  EPD_1IN54_Reset();
 
-    EPD_1IN54_SendCommand(0x01); // DRIVER_OUTPUT_CONTROL
-    EPD_1IN54_SendData((EPD_1IN54_HEIGHT - 1) & 0xFF);
-    EPD_1IN54_SendData(((EPD_1IN54_HEIGHT - 1) >> 8) & 0xFF);
-    EPD_1IN54_SendData(0x00); // GD = 0; SM = 0; TB = 0;
+  EPD_1IN54_SendCommand(0x01); // DRIVER_OUTPUT_CONTROL
+  EPD_1IN54_SendData((EPD_1IN54_HEIGHT - 1) & 0xFF);
+  EPD_1IN54_SendData(((EPD_1IN54_HEIGHT - 1) >> 8) & 0xFF);
+  EPD_1IN54_SendData(0x00); // GD = 0; SM = 0; TB = 0;
 
-    EPD_1IN54_SendCommand(0x0C); // BOOSTER_SOFT_START_CONTROL
-    EPD_1IN54_SendData(0xD7);
-    EPD_1IN54_SendData(0xD6);
-    EPD_1IN54_SendData(0x9D);
+  EPD_1IN54_SendCommand(0x0C); // BOOSTER_SOFT_START_CONTROL
+  EPD_1IN54_SendData(0xD7);
+  EPD_1IN54_SendData(0xD6);
+  EPD_1IN54_SendData(0x9D);
 
-    EPD_1IN54_SendCommand(0x2C); // WRITE_VCOM_REGISTER
-    EPD_1IN54_SendData(0xA8); // VCOM 7C
+  EPD_1IN54_SendCommand(0x2C); // WRITE_VCOM_REGISTER
+  EPD_1IN54_SendData(0xA8);    // VCOM 7C
 
-    EPD_1IN54_SendCommand(0x3A); // SET_DUMMY_LINE_PERIOD
-    EPD_1IN54_SendData(0x1A); // 4 dummy lines per gate
+  EPD_1IN54_SendCommand(0x3A); // SET_DUMMY_LINE_PERIOD
+  EPD_1IN54_SendData(0x1A);    // 4 dummy lines per gate
 
-    EPD_1IN54_SendCommand(0x3B); // SET_GATE_TIME
-    EPD_1IN54_SendData(0x08); // 2us per line
+  EPD_1IN54_SendCommand(0x3B); // SET_GATE_TIME
+  EPD_1IN54_SendData(0x08);    // 2us per line
 
-    EPD_1IN54_SendCommand(0x11);
-    EPD_1IN54_SendData(0x03);
+  EPD_1IN54_SendCommand(0x11);
+  EPD_1IN54_SendData(0x03);
 
-    //set the look-up table register
-    EPD_1IN54_SendCommand(0x32);
-    if(Mode == EPD_1IN54_FULL){
-        for (UWORD i = 0; i < 30; i++) {
-                EPD_1IN54_SendData(EPD_1IN54_lut_full_update[i]);
-        }
-    }else if(Mode == EPD_1IN54_PART){
-        for (UWORD i = 0; i < 30; i++) {
-                EPD_1IN54_SendData(EPD_1IN54_lut_partial_update[i]);
-        }
-    }else{
-        Debug("error, the Mode is EPD_1IN54_FULL or EPD_1IN54_PART");
+  // set the look-up table register
+  EPD_1IN54_SendCommand(0x32);
+  if (Mode == EPD_1IN54_FULL) {
+    for (UWORD i = 0; i < 30; i++) {
+      EPD_1IN54_SendData(EPD_1IN54_lut_full_update[i]);
     }
-    
+  } else if (Mode == EPD_1IN54_PART) {
+    for (UWORD i = 0; i < 30; i++) {
+      EPD_1IN54_SendData(EPD_1IN54_lut_partial_update[i]);
+    }
+  } else {
+    Debug("error, the Mode is EPD_1IN54_FULL or EPD_1IN54_PART");
+  }
 }
 
 /******************************************************************************
 function :	Clear screen
 parameter:
 ******************************************************************************/
-void EPD_1IN54_Clear(void)
-{
-    UWORD Width, Height;
-    Width = (EPD_1IN54_WIDTH % 8 == 0)? (EPD_1IN54_WIDTH / 8 ): (EPD_1IN54_WIDTH / 8 + 1);
-    Height = EPD_1IN54_HEIGHT;
-    EPD_1IN54_SetWindow(0, 0, EPD_1IN54_WIDTH, EPD_1IN54_HEIGHT);
-    for (UWORD j = 0; j < Height; j++) {
-        EPD_1IN54_SetCursor(0, j);
-        EPD_1IN54_SendCommand(0x24);
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_1IN54_SendData(0XFF);
-        }
+void EPD_1IN54_Clear(void) {
+  UWORD Width, Height;
+  Width = (EPD_1IN54_WIDTH % 8 == 0) ? (EPD_1IN54_WIDTH / 8)
+                                     : (EPD_1IN54_WIDTH / 8 + 1);
+  Height = EPD_1IN54_HEIGHT;
+  EPD_1IN54_SetWindow(0, 0, EPD_1IN54_WIDTH, EPD_1IN54_HEIGHT);
+  for (UWORD j = 0; j < Height; j++) {
+    EPD_1IN54_SetCursor(0, j);
+    EPD_1IN54_SendCommand(0x24);
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_1IN54_SendData(0XFF);
     }
-    EPD_1IN54_TurnOnDisplay();
+  }
+  EPD_1IN54_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void EPD_1IN54_Display(UBYTE *Image)
-{
-    UWORD Width, Height;
-    Width = (EPD_1IN54_WIDTH % 8 == 0)? (EPD_1IN54_WIDTH / 8 ): (EPD_1IN54_WIDTH / 8 + 1);
-    Height = EPD_1IN54_HEIGHT;
+void EPD_1IN54_Display(UBYTE *Image) {
+  UWORD Width, Height;
+  Width = (EPD_1IN54_WIDTH % 8 == 0) ? (EPD_1IN54_WIDTH / 8)
+                                     : (EPD_1IN54_WIDTH / 8 + 1);
+  Height = EPD_1IN54_HEIGHT;
 
-    UDOUBLE Addr = 0;
-    // UDOUBLE Offset = ImageName;
-    EPD_1IN54_SetWindow(0, 0, EPD_1IN54_WIDTH, EPD_1IN54_HEIGHT);
-    for (UWORD j = 0; j < Height; j++) {
-        EPD_1IN54_SetCursor(0, j);
-        EPD_1IN54_SendCommand(0x24);
-        for (UWORD i = 0; i < Width; i++) {
-            Addr = i + j * Width;
-            EPD_1IN54_SendData(Image[Addr]);
-        }
+  UDOUBLE Addr = 0;
+  // UDOUBLE Offset = ImageName;
+  EPD_1IN54_SetWindow(0, 0, EPD_1IN54_WIDTH, EPD_1IN54_HEIGHT);
+  for (UWORD j = 0; j < Height; j++) {
+    EPD_1IN54_SetCursor(0, j);
+    EPD_1IN54_SendCommand(0x24);
+    for (UWORD i = 0; i < Width; i++) {
+      Addr = i + j * Width;
+      EPD_1IN54_SendData(Image[Addr]);
     }
-    EPD_1IN54_TurnOnDisplay();
+  }
+  EPD_1IN54_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Enter sleep mode
 parameter:
 ******************************************************************************/
-void EPD_1IN54_Sleep(void)
-{
-    EPD_1IN54_SendCommand(0x10);
-    EPD_1IN54_SendData(0x01);
+void EPD_1IN54_Sleep(void) {
+  EPD_1IN54_SendCommand(0x10);
+  EPD_1IN54_SendData(0x01);
 }

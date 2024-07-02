@@ -8,9 +8,9 @@
 * | Date        :   2019-06-12
 * | Info        :
 * -----------------------------------------------------------------------------
-* V3.0(2019-06-12): 
+* V3.0(2019-06-12):
 *    lut_vcom_dc[] => EPD_2in7B_lut_vcom_dc[]
-*    lut_ww[] => EPD_2in7B_lut_ww[] 
+*    lut_ww[] => EPD_2in7B_lut_ww[]
 *    lut_bw[] => EPD_2in7B_lut_bw[]
 *    lut_bb[] => EPD_2in7B_lut_bb[]
 *    lut_wb[] => EPD_2in7B_lut_wb[]
@@ -90,72 +90,50 @@
 #include "Debug.h"
 
 static const unsigned char EPD_2IN7B_lut_vcom_dc[] = {
-    0x00, 0x00,
-    0x00, 0x1A, 0x1A, 0x00, 0x00, 0x01,
-    0x00, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x00, 0x0E, 0x01, 0x0E, 0x01, 0x10,
-    0x00, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x00, 0x04, 0x10, 0x00, 0x00, 0x05,
-    0x00, 0x03, 0x0E, 0x00, 0x00, 0x0A,
-    0x00, 0x23, 0x00, 0x00, 0x00, 0x01
-};
+    0x00, 0x00, 0x00, 0x1A, 0x1A, 0x00, 0x00, 0x01, 0x00, 0x0A, 0x0A,
+    0x00, 0x00, 0x08, 0x00, 0x0E, 0x01, 0x0E, 0x01, 0x10, 0x00, 0x0A,
+    0x0A, 0x00, 0x00, 0x08, 0x00, 0x04, 0x10, 0x00, 0x00, 0x05, 0x00,
+    0x03, 0x0E, 0x00, 0x00, 0x0A, 0x00, 0x23, 0x00, 0x00, 0x00, 0x01};
 
-//R21H
+// R21H
 static const unsigned char EPD_2IN7B_lut_ww[] = {
-    0x90, 0x1A, 0x1A, 0x00, 0x00, 0x01,
-    0x40, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10,
-    0x80, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x00, 0x04, 0x10, 0x00, 0x00, 0x05,
-    0x00, 0x03, 0x0E, 0x00, 0x00, 0x0A,
-    0x00, 0x23, 0x00, 0x00, 0x00, 0x01
-};
+    0x90, 0x1A, 0x1A, 0x00, 0x00, 0x01, 0x40, 0x0A, 0x0A, 0x00, 0x00,
+    0x08, 0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10, 0x80, 0x0A, 0x0A, 0x00,
+    0x00, 0x08, 0x00, 0x04, 0x10, 0x00, 0x00, 0x05, 0x00, 0x03, 0x0E,
+    0x00, 0x00, 0x0A, 0x00, 0x23, 0x00, 0x00, 0x00, 0x01};
 
-//R22H    r
+// R22H    r
 static const unsigned char EPD_2IN7B_lut_bw[] = {
-    0xA0, 0x1A, 0x1A, 0x00, 0x00, 0x01,
-    0x00, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10,
-    0x90, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0xB0, 0x04, 0x10, 0x00, 0x00, 0x05,
-    0xB0, 0x03, 0x0E, 0x00, 0x00, 0x0A,
-    0xC0, 0x23, 0x00, 0x00, 0x00, 0x01
-};
+    0xA0, 0x1A, 0x1A, 0x00, 0x00, 0x01, 0x00, 0x0A, 0x0A, 0x00, 0x00,
+    0x08, 0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10, 0x90, 0x0A, 0x0A, 0x00,
+    0x00, 0x08, 0xB0, 0x04, 0x10, 0x00, 0x00, 0x05, 0xB0, 0x03, 0x0E,
+    0x00, 0x00, 0x0A, 0xC0, 0x23, 0x00, 0x00, 0x00, 0x01};
 
-//R23H    w
+// R23H    w
 static const unsigned char EPD_2IN7B_lut_bb[] = {
-    0x90, 0x1A, 0x1A, 0x00, 0x00, 0x01,
-    0x40, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10,
-    0x80, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x00, 0x04, 0x10, 0x00, 0x00, 0x05,
-    0x00, 0x03, 0x0E, 0x00, 0x00, 0x0A,
-    0x00, 0x23, 0x00, 0x00, 0x00, 0x01
-};
+    0x90, 0x1A, 0x1A, 0x00, 0x00, 0x01, 0x40, 0x0A, 0x0A, 0x00, 0x00,
+    0x08, 0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10, 0x80, 0x0A, 0x0A, 0x00,
+    0x00, 0x08, 0x00, 0x04, 0x10, 0x00, 0x00, 0x05, 0x00, 0x03, 0x0E,
+    0x00, 0x00, 0x0A, 0x00, 0x23, 0x00, 0x00, 0x00, 0x01};
 
-//R24H    b
+// R24H    b
 static const unsigned char EPD_2IN7B_lut_wb[] = {
-    0x90, 0x1A, 0x1A, 0x00, 0x00, 0x01,
-    0x20, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10,
-    0x10, 0x0A, 0x0A, 0x00, 0x00, 0x08,
-    0x00, 0x04, 0x10, 0x00, 0x00, 0x05,
-    0x00, 0x03, 0x0E, 0x00, 0x00, 0x0A,
-    0x00, 0x23, 0x00, 0x00, 0x00, 0x01
-};
+    0x90, 0x1A, 0x1A, 0x00, 0x00, 0x01, 0x20, 0x0A, 0x0A, 0x00, 0x00,
+    0x08, 0x84, 0x0E, 0x01, 0x0E, 0x01, 0x10, 0x10, 0x0A, 0x0A, 0x00,
+    0x00, 0x08, 0x00, 0x04, 0x10, 0x00, 0x00, 0x05, 0x00, 0x03, 0x0E,
+    0x00, 0x00, 0x0A, 0x00, 0x23, 0x00, 0x00, 0x00, 0x01};
 
 /******************************************************************************
 function :	Software reset
 parameter:
 ******************************************************************************/
-static void EPD_2IN7B_Reset(void)
-{
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
-    DEV_Digital_Write(EPD_RST_PIN, 0);
-    DEV_Delay_ms(2);
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
+static void EPD_2IN7B_Reset(void) {
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
+  DEV_Digital_Write(EPD_RST_PIN, 0);
+  DEV_Delay_ms(2);
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
 }
 
 /******************************************************************************
@@ -163,12 +141,11 @@ function :	send command
 parameter:
      Reg : Command register
 ******************************************************************************/
-static void EPD_2IN7B_SendCommand(UBYTE Reg)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 0);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Reg);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_2IN7B_SendCommand(UBYTE Reg) {
+  DEV_Digital_Write(EPD_DC_PIN, 0);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Reg);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -176,173 +153,168 @@ function :	send data
 parameter:
     Data : Write data
 ******************************************************************************/
-static void EPD_2IN7B_SendData(UBYTE Data)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Data);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_2IN7B_SendData(UBYTE Data) {
+  DEV_Digital_Write(EPD_DC_PIN, 1);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Data);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
 function :	Wait until the busy_pin goes LOW
 parameter:
 ******************************************************************************/
-static void EPD_2IN7B_ReadBusy(void)
-{
-    Debug("e-Paper busy\r\n");
-    while(DEV_Digital_Read(EPD_BUSY_PIN) == 0) {      //0: busy, 1: idle
-        DEV_Delay_ms(100);
-    }    
-    Debug("e-Paper busy release\r\n");
+static void EPD_2IN7B_ReadBusy(void) {
+  Debug("e-Paper busy\r\n");
+  while (DEV_Digital_Read(EPD_BUSY_PIN) == 0) { // 0: busy, 1: idle
+    DEV_Delay_ms(100);
+  }
+  Debug("e-Paper busy release\r\n");
 }
 
 /******************************************************************************
 function :	set the look-up tables
 parameter:
 ******************************************************************************/
-static void EPD_2IN7B_SetLut(void)
-{
-    unsigned int count;     
-    EPD_2IN7B_SendCommand(0x20); //vcom
-    for(count = 0; count < 44; count++) {
-        EPD_2IN7B_SendData(EPD_2IN7B_lut_vcom_dc[count]);
-    }
-    
-    EPD_2IN7B_SendCommand(0x21); //ww --
-    for(count = 0; count < 42; count++) {
-        EPD_2IN7B_SendData(EPD_2IN7B_lut_ww[count]);
-    }   
-    
-    EPD_2IN7B_SendCommand(0x22); //bw r
-    for(count = 0; count < 42; count++) {
-        EPD_2IN7B_SendData(EPD_2IN7B_lut_bw[count]);
-    } 
+static void EPD_2IN7B_SetLut(void) {
+  unsigned int count;
+  EPD_2IN7B_SendCommand(0x20); // vcom
+  for (count = 0; count < 44; count++) {
+    EPD_2IN7B_SendData(EPD_2IN7B_lut_vcom_dc[count]);
+  }
 
-    EPD_2IN7B_SendCommand(0x23); //wb w
-    for(count = 0; count < 42; count++) {
-        EPD_2IN7B_SendData(EPD_2IN7B_lut_bb[count]);
-    } 
+  EPD_2IN7B_SendCommand(0x21); // ww --
+  for (count = 0; count < 42; count++) {
+    EPD_2IN7B_SendData(EPD_2IN7B_lut_ww[count]);
+  }
 
-    EPD_2IN7B_SendCommand(0x24); //bb b
-    for(count = 0; count < 42; count++) {
-        EPD_2IN7B_SendData(EPD_2IN7B_lut_wb[count]);
-    } 
+  EPD_2IN7B_SendCommand(0x22); // bw r
+  for (count = 0; count < 42; count++) {
+    EPD_2IN7B_SendData(EPD_2IN7B_lut_bw[count]);
+  }
+
+  EPD_2IN7B_SendCommand(0x23); // wb w
+  for (count = 0; count < 42; count++) {
+    EPD_2IN7B_SendData(EPD_2IN7B_lut_bb[count]);
+  }
+
+  EPD_2IN7B_SendCommand(0x24); // bb b
+  for (count = 0; count < 42; count++) {
+    EPD_2IN7B_SendData(EPD_2IN7B_lut_wb[count]);
+  }
 }
 
 /******************************************************************************
 function :	Initialize the e-Paper register
 parameter:
 ******************************************************************************/
-void EPD_2IN7B_Init(void)
-{
-    EPD_2IN7B_Reset();
-    
-    EPD_2IN7B_SendCommand(0x06);         //boost soft start
-    EPD_2IN7B_SendData (0x07);		//A
-    EPD_2IN7B_SendData (0x07);		//B
-    EPD_2IN7B_SendData (0x17);		//C       
+void EPD_2IN7B_Init(void) {
+  EPD_2IN7B_Reset();
 
-    EPD_2IN7B_SendCommand(0x04);  
-    EPD_2IN7B_ReadBusy();//waiting for the electronic paper IC to release the idle signal
+  EPD_2IN7B_SendCommand(0x06); // boost soft start
+  EPD_2IN7B_SendData(0x07);    // A
+  EPD_2IN7B_SendData(0x07);    // B
+  EPD_2IN7B_SendData(0x17);    // C
 
-    EPD_2IN7B_SendCommand(0x00);			//panel setting
-    EPD_2IN7B_SendData(0x0f);		//LUT from OTP￡?128x296
+  EPD_2IN7B_SendCommand(0x04);
+  EPD_2IN7B_ReadBusy(); // waiting for the electronic paper IC to release the
+                        // idle signal
 
-    EPD_2IN7B_SendCommand(0x16);
-    EPD_2IN7B_SendData(0x00);				//KW-BF   KWR-AF	BWROTP 0f	
+  EPD_2IN7B_SendCommand(0x00); // panel setting
+  EPD_2IN7B_SendData(0x0f);    // LUT from OTP￡?128x296
 
-    EPD_2IN7B_SendCommand(0xF8);         //boostéè?¨
-    EPD_2IN7B_SendData (0x60);
-    EPD_2IN7B_SendData(0xa5);
+  EPD_2IN7B_SendCommand(0x16);
+  EPD_2IN7B_SendData(0x00); // KW-BF   KWR-AF	BWROTP 0f
 
-    EPD_2IN7B_SendCommand(0xF8);         //boostéè?¨
-    EPD_2IN7B_SendData (0x90);
-    EPD_2IN7B_SendData (0x00);
+  EPD_2IN7B_SendCommand(0xF8); // boostéè?¨
+  EPD_2IN7B_SendData(0x60);
+  EPD_2IN7B_SendData(0xa5);
 
-    EPD_2IN7B_SendCommand(0xF8);         //boostéè?¨
-    EPD_2IN7B_SendData (0x93);
-    EPD_2IN7B_SendData(0x2A);
+  EPD_2IN7B_SendCommand(0xF8); // boostéè?¨
+  EPD_2IN7B_SendData(0x90);
+  EPD_2IN7B_SendData(0x00);
 
-    EPD_2IN7B_SendCommand(0x01); // PANEL_SETTING
-    EPD_2IN7B_SendData(0x03); // VDS_EN, VDG_EN
-    EPD_2IN7B_SendData(0x00); // VCOM_HV, VGHL_LV[1], VGHL_LV[0]
-    EPD_2IN7B_SendData(0x2b); // VDH
-    EPD_2IN7B_SendData(0x2b); // VDL
-    EPD_2IN7B_SendData(0x2b); // VDHR
-    
+  EPD_2IN7B_SendCommand(0xF8); // boostéè?¨
+  EPD_2IN7B_SendData(0x93);
+  EPD_2IN7B_SendData(0x2A);
+
+  EPD_2IN7B_SendCommand(0x01); // PANEL_SETTING
+  EPD_2IN7B_SendData(0x03);    // VDS_EN, VDG_EN
+  EPD_2IN7B_SendData(0x00);    // VCOM_HV, VGHL_LV[1], VGHL_LV[0]
+  EPD_2IN7B_SendData(0x2b);    // VDH
+  EPD_2IN7B_SendData(0x2b);    // VDL
+  EPD_2IN7B_SendData(0x2b);    // VDHR
 }
 
 /******************************************************************************
 function :	Clear screen
 parameter:
 ******************************************************************************/
-void EPD_2IN7B_Clear(void)
-{    
-    UWORD Width, Height;
-    Width = (EPD_2IN7B_WIDTH % 8 == 0)? (EPD_2IN7B_WIDTH / 8 ): (EPD_2IN7B_WIDTH / 8 + 1);
-    Height = EPD_2IN7B_HEIGHT;
+void EPD_2IN7B_Clear(void) {
+  UWORD Width, Height;
+  Width = (EPD_2IN7B_WIDTH % 8 == 0) ? (EPD_2IN7B_WIDTH / 8)
+                                     : (EPD_2IN7B_WIDTH / 8 + 1);
+  Height = EPD_2IN7B_HEIGHT;
 
-    EPD_2IN7B_SendCommand(0x10);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_2IN7B_SendData(0X00);
-        }
+  EPD_2IN7B_SendCommand(0x10);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_2IN7B_SendData(0X00);
     }
-    EPD_2IN7B_SendCommand(0x11); // DATA_STOP
+  }
+  EPD_2IN7B_SendCommand(0x11); // DATA_STOP
 
-    EPD_2IN7B_SendCommand(0x13);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_2IN7B_SendData(0X00);
-        }
+  EPD_2IN7B_SendCommand(0x13);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_2IN7B_SendData(0X00);
     }
-    EPD_2IN7B_SendCommand(0x11); // DATA_STOP
-    
-    EPD_2IN7B_SendCommand(0x12);
-    EPD_2IN7B_ReadBusy();
+  }
+  EPD_2IN7B_SendCommand(0x11); // DATA_STOP
+
+  EPD_2IN7B_SendCommand(0x12);
+  EPD_2IN7B_ReadBusy();
 }
 
 /******************************************************************************
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void EPD_2IN7B_Display(UBYTE *Imageblack, UBYTE *Imagered)
-{
-    UWORD Width, Height;
-    Width = (EPD_2IN7B_WIDTH % 8 == 0)? (EPD_2IN7B_WIDTH / 8 ): (EPD_2IN7B_WIDTH / 8 + 1);
-    Height = EPD_2IN7B_HEIGHT;
+void EPD_2IN7B_Display(UBYTE *Imageblack, UBYTE *Imagered) {
+  UWORD Width, Height;
+  Width = (EPD_2IN7B_WIDTH % 8 == 0) ? (EPD_2IN7B_WIDTH / 8)
+                                     : (EPD_2IN7B_WIDTH / 8 + 1);
+  Height = EPD_2IN7B_HEIGHT;
 
-    EPD_2IN7B_SendCommand(0x10);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_2IN7B_SendData(~Imageblack[i + j * Width]);
-        }
+  EPD_2IN7B_SendCommand(0x10);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_2IN7B_SendData(~Imageblack[i + j * Width]);
     }
-    EPD_2IN7B_SendCommand(0x11); // DATA_STOP
-    
-    EPD_2IN7B_SendCommand(0x13);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_2IN7B_SendData(~Imagered[i + j * Width]);
-        }
+  }
+  EPD_2IN7B_SendCommand(0x11); // DATA_STOP
+
+  EPD_2IN7B_SendCommand(0x13);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_2IN7B_SendData(~Imagered[i + j * Width]);
     }
- 
-    EPD_2IN7B_SendCommand(0x11); // DATA_STOP
-    
-    EPD_2IN7B_SendCommand(0x12);
-    EPD_2IN7B_ReadBusy();
+  }
+
+  EPD_2IN7B_SendCommand(0x11); // DATA_STOP
+
+  EPD_2IN7B_SendCommand(0x12);
+  EPD_2IN7B_ReadBusy();
 }
 
 /******************************************************************************
 function :	Enter sleep mode
 parameter:
 ******************************************************************************/
-void EPD_2IN7B_Sleep(void)
-{
-    EPD_2IN7B_SendCommand(0X50);
-    EPD_2IN7B_SendData(0xf7);
-    EPD_2IN7B_SendCommand(0X02); //power off
-    EPD_2IN7B_SendCommand(0X07); //deep sleep
-    EPD_2IN7B_SendData(0xA5);
+void EPD_2IN7B_Sleep(void) {
+  EPD_2IN7B_SendCommand(0X50);
+  EPD_2IN7B_SendData(0xf7);
+  EPD_2IN7B_SendCommand(0X02); // power off
+  EPD_2IN7B_SendCommand(0X07); // deep sleep
+  EPD_2IN7B_SendData(0xA5);
 }

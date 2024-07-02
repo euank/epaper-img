@@ -89,14 +89,13 @@
 function :	Software reset
 parameter:
 ******************************************************************************/
-static void EPD_5IN83BC_Reset(void)
-{
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
-    DEV_Digital_Write(EPD_RST_PIN, 0);
-    DEV_Delay_ms(2);
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
+static void EPD_5IN83BC_Reset(void) {
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
+  DEV_Digital_Write(EPD_RST_PIN, 0);
+  DEV_Delay_ms(2);
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
 }
 
 /******************************************************************************
@@ -104,12 +103,11 @@ function :	send command
 parameter:
      Reg : Command register
 ******************************************************************************/
-static void EPD_5IN83BC_SendCommand(UBYTE Reg)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 0);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Reg);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_5IN83BC_SendCommand(UBYTE Reg) {
+  DEV_Digital_Write(EPD_DC_PIN, 0);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Reg);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -117,221 +115,215 @@ function :	send data
 parameter:
     Data : Write data
 ******************************************************************************/
-static void EPD_5IN83BC_SendData(UBYTE Data)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Data);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_5IN83BC_SendData(UBYTE Data) {
+  DEV_Digital_Write(EPD_DC_PIN, 1);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Data);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
 function :	Wait until the busy_pin goes LOW
 parameter:
 ******************************************************************************/
-void EPD_5IN83BC_ReadBusy(void)
-{
-    UBYTE busy;
-    Debug("e-Paper busy\r\n");
-    do {
-        EPD_5IN83BC_SendCommand(0x71);
-        busy = DEV_Digital_Read(EPD_BUSY_PIN);
-        busy =!(busy & 0x01);
-    } while(busy);
-    Debug("e-Paper busy release\r\n");
+void EPD_5IN83BC_ReadBusy(void) {
+  UBYTE busy;
+  Debug("e-Paper busy\r\n");
+  do {
+    EPD_5IN83BC_SendCommand(0x71);
+    busy = DEV_Digital_Read(EPD_BUSY_PIN);
+    busy = !(busy & 0x01);
+  } while (busy);
+  Debug("e-Paper busy release\r\n");
 }
 
 /******************************************************************************
 function :	Turn On Display
 parameter:
 ******************************************************************************/
-static void EPD_5IN83BC_TurnOnDisplay(void)
-{
-    EPD_5IN83BC_SendCommand(0x04); // POWER ON
-    EPD_5IN83BC_ReadBusy();
-    EPD_5IN83BC_SendCommand(0x12); // display refresh
-    DEV_Delay_ms(100);
-    EPD_5IN83BC_ReadBusy();
-
+static void EPD_5IN83BC_TurnOnDisplay(void) {
+  EPD_5IN83BC_SendCommand(0x04); // POWER ON
+  EPD_5IN83BC_ReadBusy();
+  EPD_5IN83BC_SendCommand(0x12); // display refresh
+  DEV_Delay_ms(100);
+  EPD_5IN83BC_ReadBusy();
 }
 
 /******************************************************************************
 function :	Initialize the e-Paper register
 parameter:
 ******************************************************************************/
-void EPD_5IN83BC_Init(void)
-{
-    EPD_5IN83BC_Reset();
+void EPD_5IN83BC_Init(void) {
+  EPD_5IN83BC_Reset();
 
-    EPD_5IN83BC_SendCommand(0x01); // POWER_SETTING
-    EPD_5IN83BC_SendData(0x37);
-    EPD_5IN83BC_SendData(0x00);
+  EPD_5IN83BC_SendCommand(0x01); // POWER_SETTING
+  EPD_5IN83BC_SendData(0x37);
+  EPD_5IN83BC_SendData(0x00);
 
-    EPD_5IN83BC_SendCommand(0x00); // PANEL_SETTING
-    EPD_5IN83BC_SendData(0xCF);
-    EPD_5IN83BC_SendData(0x08);
+  EPD_5IN83BC_SendCommand(0x00); // PANEL_SETTING
+  EPD_5IN83BC_SendData(0xCF);
+  EPD_5IN83BC_SendData(0x08);
 
-    EPD_5IN83BC_SendCommand(0x30); // PLL_CONTROL
-    EPD_5IN83BC_SendData(0x3A); //PLL:  0-15:0x3C, 15+:0x3A
+  EPD_5IN83BC_SendCommand(0x30); // PLL_CONTROL
+  EPD_5IN83BC_SendData(0x3A);    // PLL:  0-15:0x3C, 15+:0x3A
 
-    EPD_5IN83BC_SendCommand(0x82); // VCM_DC_SETTING
-    EPD_5IN83BC_SendData(0x28); //all temperature  range
+  EPD_5IN83BC_SendCommand(0x82); // VCM_DC_SETTING
+  EPD_5IN83BC_SendData(0x28);    // all temperature  range
 
-    EPD_5IN83BC_SendCommand(0x06); // BOOSTER_SOFT_START
-    EPD_5IN83BC_SendData (0xc7);
-    EPD_5IN83BC_SendData (0xcc);
-    EPD_5IN83BC_SendData (0x15);
+  EPD_5IN83BC_SendCommand(0x06); // BOOSTER_SOFT_START
+  EPD_5IN83BC_SendData(0xc7);
+  EPD_5IN83BC_SendData(0xcc);
+  EPD_5IN83BC_SendData(0x15);
 
-    EPD_5IN83BC_SendCommand(0x50); // VCOM AND DATA INTERVAL SETTING
-    EPD_5IN83BC_SendData(0x77);
+  EPD_5IN83BC_SendCommand(0x50); // VCOM AND DATA INTERVAL SETTING
+  EPD_5IN83BC_SendData(0x77);
 
-    EPD_5IN83BC_SendCommand(0x60); // TCON_SETTING
-    EPD_5IN83BC_SendData(0x22);
+  EPD_5IN83BC_SendCommand(0x60); // TCON_SETTING
+  EPD_5IN83BC_SendData(0x22);
 
-    EPD_5IN83BC_SendCommand(0x65); // FLASH CONTROL
-    EPD_5IN83BC_SendData(0x00);
+  EPD_5IN83BC_SendCommand(0x65); // FLASH CONTROL
+  EPD_5IN83BC_SendData(0x00);
 
-    EPD_5IN83BC_SendCommand(0x61); // TCON_RESOLUTION
-    EPD_5IN83BC_SendData (0x02); // source 600
-    EPD_5IN83BC_SendData (0x58);
-    EPD_5IN83BC_SendData (0x01); // gate 448
-    EPD_5IN83BC_SendData (0xc0);
+  EPD_5IN83BC_SendCommand(0x61); // TCON_RESOLUTION
+  EPD_5IN83BC_SendData(0x02);    // source 600
+  EPD_5IN83BC_SendData(0x58);
+  EPD_5IN83BC_SendData(0x01); // gate 448
+  EPD_5IN83BC_SendData(0xc0);
 
-    EPD_5IN83BC_SendCommand(0xe5); // FLASH MODE
-    EPD_5IN83BC_SendData(0x03);
-
+  EPD_5IN83BC_SendCommand(0xe5); // FLASH MODE
+  EPD_5IN83BC_SendData(0x03);
 }
 
 /******************************************************************************
 function :	Clear screen
 parameter:
 ******************************************************************************/
-void EPD_5IN83BC_Clear(void)
-{
-    UWORD Width, Height;
-    Width = (EPD_5IN83BC_WIDTH % 8 == 0)? (EPD_5IN83BC_WIDTH / 8): (EPD_5IN83BC_WIDTH / 8 + 1);
-    Height = EPD_5IN83BC_HEIGHT;
+void EPD_5IN83BC_Clear(void) {
+  UWORD Width, Height;
+  Width = (EPD_5IN83BC_WIDTH % 8 == 0) ? (EPD_5IN83BC_WIDTH / 8)
+                                       : (EPD_5IN83BC_WIDTH / 8 + 1);
+  Height = EPD_5IN83BC_HEIGHT;
 
-    EPD_5IN83BC_SendCommand(0x10);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            for(UBYTE k = 0; k < 4; k++) {
-                EPD_5IN83BC_SendData(0x33);
-            }
-        }
+  EPD_5IN83BC_SendCommand(0x10);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      for (UBYTE k = 0; k < 4; k++) {
+        EPD_5IN83BC_SendData(0x33);
+      }
     }
+  }
 
-    EPD_5IN83BC_TurnOnDisplay();
+  EPD_5IN83BC_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void EPD_5IN83BC_Display(const UBYTE *blackimage, const UBYTE *ryimage)
-{
-    UBYTE Data_Black, Data_RY, Data;
-    UDOUBLE i, j, Width, Height;
-    Width = (EPD_5IN83BC_WIDTH % 8 == 0)? (EPD_5IN83BC_WIDTH / 8 ): (EPD_5IN83BC_WIDTH / 8 + 1);
-    Height = EPD_5IN83BC_HEIGHT;
+void EPD_5IN83BC_Display(const UBYTE *blackimage, const UBYTE *ryimage) {
+  UBYTE Data_Black, Data_RY, Data;
+  UDOUBLE i, j, Width, Height;
+  Width = (EPD_5IN83BC_WIDTH % 8 == 0) ? (EPD_5IN83BC_WIDTH / 8)
+                                       : (EPD_5IN83BC_WIDTH / 8 + 1);
+  Height = EPD_5IN83BC_HEIGHT;
 
-    EPD_5IN83BC_SendCommand(0x10);
-    for (j = 0; j < Height; j++) {
-        for (i = 0; i < Width; i++) {
-            Data_Black = blackimage[i + j * Width];
-            Data_RY = ryimage[i + j * Width]; // red or yellow
-            for(UBYTE k = 0; k < 8; k++) {
-                if ((Data_RY & 0x80) == 0x00) {
-                    Data = 0x04;                //red
-                } else if ((Data_Black & 0x80) == 0x00) {
-                    Data = 0x00;               //black
-                } else {
-                    Data = 0x03;                //white
-                }
-                Data = (Data << 4) & 0xFF;
-                Data_Black = (Data_Black << 1) & 0xFF;
-                Data_RY = (Data_RY << 1) & 0xFF;
-                k += 1;
-
-                if((Data_RY & 0x80) == 0x00) {
-                    Data |= 0x04;              //red
-                } else if ((Data_Black & 0x80) == 0x00) {
-                    Data |= 0x00;              //black
-                } else {
-                    Data |= 0x03;              //white
-                }
-                Data_Black = (Data_Black << 1) & 0xFF;
-                Data_RY = (Data_RY << 1) & 0xFF;
-                EPD_5IN83BC_SendData(Data);
-            }
+  EPD_5IN83BC_SendCommand(0x10);
+  for (j = 0; j < Height; j++) {
+    for (i = 0; i < Width; i++) {
+      Data_Black = blackimage[i + j * Width];
+      Data_RY = ryimage[i + j * Width]; // red or yellow
+      for (UBYTE k = 0; k < 8; k++) {
+        if ((Data_RY & 0x80) == 0x00) {
+          Data = 0x04; // red
+        } else if ((Data_Black & 0x80) == 0x00) {
+          Data = 0x00; // black
+        } else {
+          Data = 0x03; // white
         }
-    }
+        Data = (Data << 4) & 0xFF;
+        Data_Black = (Data_Black << 1) & 0xFF;
+        Data_RY = (Data_RY << 1) & 0xFF;
+        k += 1;
 
-    EPD_5IN83BC_TurnOnDisplay();
+        if ((Data_RY & 0x80) == 0x00) {
+          Data |= 0x04; // red
+        } else if ((Data_Black & 0x80) == 0x00) {
+          Data |= 0x00; // black
+        } else {
+          Data |= 0x03; // white
+        }
+        Data_Black = (Data_Black << 1) & 0xFF;
+        Data_RY = (Data_RY << 1) & 0xFF;
+        EPD_5IN83BC_SendData(Data);
+      }
+    }
+  }
+
+  EPD_5IN83BC_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void EPD_5IN83BC_DisplayHalfScreen(const UBYTE *blackimage, const UBYTE *ryimage)
-{
-    UBYTE Data_Black, Data_RY, Data;
-    UDOUBLE i, j, Width, Height;
-    Width = (EPD_5IN83BC_WIDTH % 8 == 0)? (EPD_5IN83BC_WIDTH / 8 ): (EPD_5IN83BC_WIDTH / 8 + 1);
-    Height = EPD_5IN83BC_HEIGHT;
+void EPD_5IN83BC_DisplayHalfScreen(const UBYTE *blackimage,
+                                   const UBYTE *ryimage) {
+  UBYTE Data_Black, Data_RY, Data;
+  UDOUBLE i, j, Width, Height;
+  Width = (EPD_5IN83BC_WIDTH % 8 == 0) ? (EPD_5IN83BC_WIDTH / 8)
+                                       : (EPD_5IN83BC_WIDTH / 8 + 1);
+  Height = EPD_5IN83BC_HEIGHT;
 
-    EPD_5IN83BC_SendCommand(0x10);
-    for (j = 0; j < Height / 2; j++) {
-        for (i = 0; i < Width; i++) {
-            Data_Black = blackimage[i + j * Width];
-            Data_RY = ryimage[i + j * Width]; // red or yellow
-            for(UBYTE k = 0; k < 8; k++) {
-                if ((Data_RY & 0x80) == 0x00) {
-                    Data = 0x04;                //red
-                } else if ((Data_Black & 0x80) == 0x00) {
-                    Data = 0x00;               //black
-                } else {
-                    Data = 0x03;                //white
-                }
-                Data = (Data << 4) & 0xFF;
-                Data_Black = (Data_Black << 1) & 0xFF;
-                Data_RY = (Data_RY << 1) & 0xFF;
-                k += 1;
-
-                if((Data_RY & 0x80) == 0x00) {
-                    Data |= 0x04;              //red
-                } else if ((Data_Black & 0x80) == 0x00) {
-                    Data |= 0x00;              //black
-                } else {
-                    Data |= 0x03;              //white
-                }
-                Data_Black = (Data_Black << 1) & 0xFF;
-                Data_RY = (Data_RY << 1) & 0xFF;
-                EPD_5IN83BC_SendData(Data);
-            }
+  EPD_5IN83BC_SendCommand(0x10);
+  for (j = 0; j < Height / 2; j++) {
+    for (i = 0; i < Width; i++) {
+      Data_Black = blackimage[i + j * Width];
+      Data_RY = ryimage[i + j * Width]; // red or yellow
+      for (UBYTE k = 0; k < 8; k++) {
+        if ((Data_RY & 0x80) == 0x00) {
+          Data = 0x04; // red
+        } else if ((Data_Black & 0x80) == 0x00) {
+          Data = 0x00; // black
+        } else {
+          Data = 0x03; // white
         }
-    }
+        Data = (Data << 4) & 0xFF;
+        Data_Black = (Data_Black << 1) & 0xFF;
+        Data_RY = (Data_RY << 1) & 0xFF;
+        k += 1;
 
-    for (j = 0; j < Height / 2; j++) {
-        for (i = 0; i < Width; i++) {
-            for(UBYTE k = 0; k < 4; k++) {
-                EPD_5IN83BC_SendData(0x33);
-            }
+        if ((Data_RY & 0x80) == 0x00) {
+          Data |= 0x04; // red
+        } else if ((Data_Black & 0x80) == 0x00) {
+          Data |= 0x00; // black
+        } else {
+          Data |= 0x03; // white
         }
+        Data_Black = (Data_Black << 1) & 0xFF;
+        Data_RY = (Data_RY << 1) & 0xFF;
+        EPD_5IN83BC_SendData(Data);
+      }
     }
+  }
 
-    EPD_5IN83BC_TurnOnDisplay();
+  for (j = 0; j < Height / 2; j++) {
+    for (i = 0; i < Width; i++) {
+      for (UBYTE k = 0; k < 4; k++) {
+        EPD_5IN83BC_SendData(0x33);
+      }
+    }
+  }
+
+  EPD_5IN83BC_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Enter sleep mode
 parameter:
 ******************************************************************************/
-void EPD_5IN83BC_Sleep(void)
-{
-    EPD_5IN83BC_SendCommand(0x02); // POWER_OFF
-    EPD_5IN83BC_ReadBusy();
-    EPD_5IN83BC_SendCommand(0x07); // DEEP_SLEEP
-    EPD_5IN83BC_SendData(0XA5);
+void EPD_5IN83BC_Sleep(void) {
+  EPD_5IN83BC_SendCommand(0x02); // POWER_OFF
+  EPD_5IN83BC_ReadBusy();
+  EPD_5IN83BC_SendCommand(0x07); // DEEP_SLEEP
+  EPD_5IN83BC_SendData(0XA5);
 }

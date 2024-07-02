@@ -88,14 +88,13 @@
 function :	Software reset
 parameter:
 ******************************************************************************/
-static void EPD_4IN2BC_Reset(void)
-{
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
-    DEV_Digital_Write(EPD_RST_PIN, 0);
-    DEV_Delay_ms(2);
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
+static void EPD_4IN2BC_Reset(void) {
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
+  DEV_Digital_Write(EPD_RST_PIN, 0);
+  DEV_Delay_ms(2);
+  DEV_Digital_Write(EPD_RST_PIN, 1);
+  DEV_Delay_ms(200);
 }
 
 /******************************************************************************
@@ -103,12 +102,11 @@ function :	send command
 parameter:
      Reg : Command register
 ******************************************************************************/
-static void EPD_4IN2BC_SendCommand(UBYTE Reg)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 0);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Reg);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_4IN2BC_SendCommand(UBYTE Reg) {
+  DEV_Digital_Write(EPD_DC_PIN, 0);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Reg);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
@@ -116,118 +114,113 @@ function :	send data
 parameter:
     Data : Write data
 ******************************************************************************/
-static void EPD_4IN2BC_SendData(UBYTE Data)
-{
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Data);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+static void EPD_4IN2BC_SendData(UBYTE Data) {
+  DEV_Digital_Write(EPD_DC_PIN, 1);
+  DEV_Digital_Write(EPD_CS_PIN, 0);
+  DEV_SPI_WriteByte(Data);
+  DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
 /******************************************************************************
 function :	Wait until the busy_pin goes LOW
 parameter:
 ******************************************************************************/
-void EPD_4IN2BC_ReadBusy(void)
-{
-    Debug("e-Paper busy\r\n");
-    while(DEV_Digital_Read(EPD_BUSY_PIN) == 0) {      //0: busy, 1: idle
-        DEV_Delay_ms(100);
-    }
-    Debug("e-Paper busy release\r\n");
+void EPD_4IN2BC_ReadBusy(void) {
+  Debug("e-Paper busy\r\n");
+  while (DEV_Digital_Read(EPD_BUSY_PIN) == 0) { // 0: busy, 1: idle
+    DEV_Delay_ms(100);
+  }
+  Debug("e-Paper busy release\r\n");
 }
 
 /******************************************************************************
 function :	Turn On Display
 parameter:
 ******************************************************************************/
-static void EPD_4IN2BC_TurnOnDisplay(void)
-{
-    EPD_4IN2BC_SendCommand(0x12); // DISPLAY_REFRESH
-    DEV_Delay_ms(100);
-    EPD_4IN2BC_ReadBusy();
+static void EPD_4IN2BC_TurnOnDisplay(void) {
+  EPD_4IN2BC_SendCommand(0x12); // DISPLAY_REFRESH
+  DEV_Delay_ms(100);
+  EPD_4IN2BC_ReadBusy();
 }
 
 /******************************************************************************
 function :	Initialize the e-Paper register
 parameter:
 ******************************************************************************/
-void EPD_4IN2BC_Init(void)
-{
-    EPD_4IN2BC_Reset();
+void EPD_4IN2BC_Init(void) {
+  EPD_4IN2BC_Reset();
 
-    EPD_4IN2BC_SendCommand(0x06); // BOOSTER_SOFT_START
-    EPD_4IN2BC_SendData(0x17);
-    EPD_4IN2BC_SendData(0x17);
-    EPD_4IN2BC_SendData(0x17); // 07 0f 17 1f 27 2F 37 2f
-    EPD_4IN2BC_SendCommand(0x04); // POWER_ON
-    EPD_4IN2BC_ReadBusy();
-    EPD_4IN2BC_SendCommand(0x00); // PANEL_SETTING
-    EPD_4IN2BC_SendData(0x0F); // LUT from OTP
+  EPD_4IN2BC_SendCommand(0x06); // BOOSTER_SOFT_START
+  EPD_4IN2BC_SendData(0x17);
+  EPD_4IN2BC_SendData(0x17);
+  EPD_4IN2BC_SendData(0x17);    // 07 0f 17 1f 27 2F 37 2f
+  EPD_4IN2BC_SendCommand(0x04); // POWER_ON
+  EPD_4IN2BC_ReadBusy();
+  EPD_4IN2BC_SendCommand(0x00); // PANEL_SETTING
+  EPD_4IN2BC_SendData(0x0F);    // LUT from OTP
 }
 
 /******************************************************************************
 function :	Clear screen
 parameter:
 ******************************************************************************/
-void EPD_4IN2BC_Clear(void)
-{
-    UWORD Width, Height;
-    Width = (EPD_4IN2BC_WIDTH % 8 == 0)? (EPD_4IN2BC_WIDTH / 8 ): (EPD_4IN2BC_WIDTH / 8 + 1);
-    Height = EPD_4IN2BC_HEIGHT;
+void EPD_4IN2BC_Clear(void) {
+  UWORD Width, Height;
+  Width = (EPD_4IN2BC_WIDTH % 8 == 0) ? (EPD_4IN2BC_WIDTH / 8)
+                                      : (EPD_4IN2BC_WIDTH / 8 + 1);
+  Height = EPD_4IN2BC_HEIGHT;
 
-    EPD_4IN2BC_SendCommand(0x10);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_4IN2BC_SendData(0xFF);
-        }
+  EPD_4IN2BC_SendCommand(0x10);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_4IN2BC_SendData(0xFF);
     }
+  }
 
-    EPD_4IN2BC_SendCommand(0x13);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_4IN2BC_SendData(0xFF);
-        }
+  EPD_4IN2BC_SendCommand(0x13);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_4IN2BC_SendData(0xFF);
     }
+  }
 
-    EPD_4IN2BC_TurnOnDisplay();
+  EPD_4IN2BC_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void EPD_4IN2BC_Display(const UBYTE *blackimage, const UBYTE *ryimage)
-{
-    UWORD Width, Height;
-    Width = (EPD_4IN2BC_WIDTH % 8 == 0)? (EPD_4IN2BC_WIDTH / 8 ): (EPD_4IN2BC_WIDTH / 8 + 1);
-    Height = EPD_4IN2BC_HEIGHT;
+void EPD_4IN2BC_Display(const UBYTE *blackimage, const UBYTE *ryimage) {
+  UWORD Width, Height;
+  Width = (EPD_4IN2BC_WIDTH % 8 == 0) ? (EPD_4IN2BC_WIDTH / 8)
+                                      : (EPD_4IN2BC_WIDTH / 8 + 1);
+  Height = EPD_4IN2BC_HEIGHT;
 
-    EPD_4IN2BC_SendCommand(0x10);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_4IN2BC_SendData(blackimage[i + j * Width]);
-        }
+  EPD_4IN2BC_SendCommand(0x10);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_4IN2BC_SendData(blackimage[i + j * Width]);
     }
+  }
 
-    EPD_4IN2BC_SendCommand(0x13);
-    for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
-            EPD_4IN2BC_SendData(ryimage[i + j * Width]);
-        }
+  EPD_4IN2BC_SendCommand(0x13);
+  for (UWORD j = 0; j < Height; j++) {
+    for (UWORD i = 0; i < Width; i++) {
+      EPD_4IN2BC_SendData(ryimage[i + j * Width]);
     }
+  }
 
-    EPD_4IN2BC_TurnOnDisplay();
+  EPD_4IN2BC_TurnOnDisplay();
 }
 
 /******************************************************************************
 function :	Enter sleep mode
 parameter:
 ******************************************************************************/
-void EPD_4IN2BC_Sleep(void)
-{
-    EPD_4IN2BC_SendCommand(0x02); // POWER_OFF
-    EPD_4IN2BC_ReadBusy();
-    EPD_4IN2BC_SendCommand(0x07); // DEEP_SLEEP
-    EPD_4IN2BC_SendData(0XA5);
+void EPD_4IN2BC_Sleep(void) {
+  EPD_4IN2BC_SendCommand(0x02); // POWER_OFF
+  EPD_4IN2BC_ReadBusy();
+  EPD_4IN2BC_SendCommand(0x07); // DEEP_SLEEP
+  EPD_4IN2BC_SendData(0XA5);
 }
