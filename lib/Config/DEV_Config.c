@@ -32,6 +32,9 @@
 int GPIO_Handle;
 int SPI_Handle;
 
+// SPI
+int SPI_DEV;
+int SPI_CHAN;
 /**
  * GPIO
  **/
@@ -84,24 +87,7 @@ void DEV_GPIO_Mode(UWORD Pin, UWORD Mode) {
 void DEV_Delay_ms(UDOUBLE xms) { lguSleep(xms / 1000.0); }
 
 void DEV_GPIO_Init(void) {
-  EPD_PWR_PIN = 14;
-  EPD_MOSI_PIN = 20;
-  EPD_SCLK_PIN = 21;
-#if 0
-	SPI_Handle = lgSpiOpen(1, 0, 10000000, 0);
-	EPD_RST_PIN     = 5;
-	EPD_DC_PIN      = 6;
-	EPD_CS_PIN      = /* 18; */ 3;
-	EPD_BUSY_PIN    = 26;
-#else
-  SPI_Handle = lgSpiOpen(1, 0, 10000000, 0);
-  // screen 2
-  EPD_RST_PIN = 0;
-  EPD_DC_PIN = 12;
-  EPD_CS_PIN = 4;
-  EPD_BUSY_PIN = 13;
-#endif
-
+  SPI_Handle = lgSpiOpen(SPI_DEV, SPI_CHAN, 10000000, 0);
   DEV_GPIO_Mode(EPD_BUSY_PIN, 0);
   DEV_GPIO_Mode(EPD_RST_PIN, 1);
   DEV_GPIO_Mode(EPD_DC_PIN, 1);

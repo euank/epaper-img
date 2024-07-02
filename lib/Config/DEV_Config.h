@@ -66,6 +66,9 @@
 #define UWORD uint16_t
 #define UDOUBLE uint32_t
 
+// SPI
+extern int SPI_DEV;
+extern int SPI_CHAN;
 /**
  * GPIOI config
  **/
