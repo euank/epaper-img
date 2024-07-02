@@ -48,28 +48,27 @@
 #ifndef _DEV_CONFIG_H_
 #define _DEV_CONFIG_H_
 
+#include "Debug.h"
+#include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
 #include <string.h>
-#include "Debug.h"
+#include <unistd.h>
 
 #include <lgpio.h>
 #define LFLAGS 0
-#define NUM_MAXBUF  4
+#define NUM_MAXBUF 4
 
 /**
  * data
-**/
-#define UBYTE   uint8_t
-#define UWORD   uint16_t
+ **/
+#define UBYTE uint8_t
+#define UWORD uint16_t
 #define UDOUBLE uint32_t
 
 /**
  * GPIOI config
-**/
+ **/
 extern int EPD_RST_PIN;
 extern int EPD_DC_PIN;
 extern int EPD_CS_PIN;
@@ -92,6 +91,5 @@ UBYTE DEV_SPI_ReadData();
 
 UBYTE DEV_Module_Init(void);
 void DEV_Module_Exit(void);
-
 
 #endif
