@@ -1,6 +1,6 @@
 ## e-Paper img
 
-This code allows flashing an image to a [4.2 inch B](https://www.waveshare.com/wiki/4.2inch_e-Paper_Module_\(B\)\_Manual) waveshare e-ink display.
+This code allows flashing an image to a [4.2 inch B](https://www.waveshare.com/wiki/4.2inch_e-Paper_Module_\(B\)\_Manual) waveshare e-ink display from a raspberry pi.
 
 It makes assumptions that are specific to the environment I'm running in, and is not meant to really be generally usable code.
 
@@ -8,11 +8,22 @@ I specifically want the following properties:
 
 1. Write images (and only images, I don't care about fonts or drawing or whatever)
 2. Control 3 e-Ink displays from one board at once by wiring them to different GPIO pins and using SPI CS selection.
-3. Runs on the NixOS image I'm using for this project (TODO: link to it once it's in a public repo somewhere)
+3. Runs on the raspberry pi running NixOS setup, which I'm using for this project (TODO: link to it once it's in a public repo somewhere)
 
-The goal is for this to spit out a CLI tool that allows displaying an image with a given SPI+GPIO configuration at runtime.
+The point of this repo is to spit out a CLI tool that allows displaying an
+image with a given SPI+GPIO configuration at runtime.
 
 The original example code this is based on could display an image, but configuration was hard-coded, and it supported a bunch of boards. I really don't care about the other boards, so we can simplify.
+
+This really is just plumbing flags for the upstream sample code.
+
+### Compiling
+
+```console
+$ nix develop
+$ meson setup build
+$ ninja -C builddir
+```
 
 ### Why C
 
